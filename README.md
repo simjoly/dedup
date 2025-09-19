@@ -60,8 +60,10 @@ make
 
 ### Example
 
+Here is an example of usage with the barcodes in the names of the samples and using a Bloom filter:
+
 ```bash
-./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-memory
+./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-bloom
 ```
 
 Output files will be written as:
@@ -69,6 +71,64 @@ Output files will be written as:
 - `nodup_<read1file>.fastq.gz`
 - `nodup_<read2file>.fastq.gz`
 
+
+## Random barcode index
+
+The program can take into account the use of a random nucleotide barcodes incorporated at the PCR step of the library to identify PCR duplicates, as in the 3RAD protocol. There are two options to feed this information to the program.
+
+### Separate index file
+
+If the random index is in a separate fastq file (same order as in the files that contain the reads), you can run the program using this command:
+
+```bash
+./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --index <indexfile>
+```
+
+### Index in the name of the sample
+
+The random index can be placed in the name of the sample. For instance, in the fastq file:
+
+```
+@A01114:199:HGJMGDSXF:2:1101:1949:1016:GTGGGGGG 1:N:0:TGAGGTGT
+ANCGTTGGCTAGACTGAAATAACTAGACGTCTAAGTCTAGGTCTTCTCTAGGTCGTCTTCAGGTGAACAACGAGGTCCTACAGAAGATGTTGAGATAAGAGAGGTATAAAACCGAAATAATGATTTAGAACCCGCAAAAGTTTTTGAAATA
++
+F#:F:,F:FFF,F,F,FFF,FF:F,:FFF:F:F:FFFFFFFFF:FFFFF:FFFF,FFF,FFF,,FFF:FFF:F:FFFFFF:FFFF,FF,F,FFFF:FFFFFF,:FFFFFFFF,FFFF:FFFFF:FFF:FF:F::FFFFF,F::FFFF,FFF
+``` 
+
+The index is before the space in the sequence name (line begining with @). In this example, the index is GTGGGGGG. To analyze this, you can run the program like this:
+
+```bash
+./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name
+```
+
+
+## Deduplication method
+
+Three options are possible for the demultiplication method
+
+### Virtual memory
+
+With this option, the reads and index are store in the virtual memory and this information is read to see if a new sequence is a duplicate (is already in memory). This approach is fast, exact (makes no errors), but uses ~50–100 bytes per read stored. Should be used with datasets up to ~ 50M reads. Usage is:
+
+```bash
+./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-memory
+```
+
+### Bloom filter (default option)
+
+The Bloom filter is an approach often used in bioinformatics. It is a probabilistic methods that trades exactness for probabilistic membership (false positive allowed, no false negatives). This allow to save a lot of memory space, and a few unique flags may be wrongly flagged as duplicates. Presently, the falso positive rate is fixed to 0.1%, but this can be adjusted in the script. Usage is:
+
+```bash
+./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-bloom
+```
+
+### SQlite database
+
+If memory is really a problem, then it is possible to store the reads in a database on drive. This requires very little memory, but that makes the program very slow.
+
+```bash
+./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-sqlite
+```
 
 
 ## Performance Notes

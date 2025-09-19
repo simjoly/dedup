@@ -121,7 +121,7 @@ public:
 int main(int argc, char* argv[]) {
     std::string read1_file, read2_file, index_file;
     bool barcode_in_name = false;
-    std::string backend = "sqlite"; // default
+    std::string backend = "bloom"; // default
 
     static struct option long_options[] = {
         {"read1", required_argument, 0, 'a'},
