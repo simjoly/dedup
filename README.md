@@ -1,9 +1,9 @@
 # dedup : remove duplicates in fastq files
 
 This tool removes duplicate read pairs from paired-end FASTQ files. It can handle a random index incorporated in the PCR product during the library construction.
+
 It supports multiple backends for duplicate detection: in-memory, Bloom filter, and SQLite database.
 
----
 
 ## Features
 
@@ -17,7 +17,6 @@ It supports multiple backends for duplicate detection: in-memory, Bloom filter, 
   - From the read name itself (`--barcode-in-name`).
   - Pasted to one of the reads.
 
----
 
 ## Compilation
 
@@ -42,7 +41,6 @@ brew install zlib sqlite openssl
 make
 ```
 
----
 
 ## Usage
 
@@ -72,7 +70,6 @@ Output files will be written as:
 - `nodup_<read2file>.fastq.gz`
 
 
----
 
 ## Performance Notes
 
@@ -80,8 +77,15 @@ Output files will be written as:
 - **Bloom filter**: Memory efficient, but trades exactness for probabilistic membership (false positive allowed, no false negatives). This allow to save a lot of memory space, and a few unique flags may be wrongly flagged as duplicates. The false positive rate is adjustable (default 0.1%). 
 - **SQLite**: Saves the reads in a SQlite database. This is safe for very large datasets, but slower due to disk I/O.
 
----
+
+## Authors
+
+Simon Joly, 2025, for the main program. Developped with support from chatGPT, but the whole script was validated by the author.
+
+Arash Partow, 2000, for the Open Bloom Filter (bloom_filter.hpp)
+
+
 
 ## License
 
-MIT License. Feel free to use, modify, and distribute.
+Distributed under the MIT License. Feel free to use, modify, and distribute.
