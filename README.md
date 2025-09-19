@@ -86,7 +86,7 @@ If the random index is in a separate fastq file (same order as in the files that
 
 ### Index in the name of the sample
 
-The random index can be placed in the name of the sample. For instance, in the fastq file:
+The random index can be placed in the name of the sample. For instance, in one sequence of the read1 fastq file:
 
 ```
 @A01114:199:HGJMGDSXF:2:1101:1949:1016:GTGGGGGG 1:N:0:TGAGGTGT
@@ -95,7 +95,7 @@ ANCGTTGGCTAGACTGAAATAACTAGACGTCTAAGTCTAGGTCTTCTCTAGGTCGTCTTCAGGTGAACAACGAGGTCCTA
 F#:F:,F:FFF,F,F,FFF,FF:F,:FFF:F:F:FFFFFFFFF:FFFFF:FFFF,FFF,FFF,,FFF:FFF:F:FFFFFF:FFFF,FF,F,FFFF:FFFFFF,:FFFFFFFF,FFFF:FFFFF:FFF:FF:F::FFFFF,F::FFFF,FFF
 ``` 
 
-The index is before the space in the sequence name (line begining with @). In this example, the index is GTGGGGGG. To analyze this, you can run the program like this:
+The index is before the space in the sequence name (line begining with @). In this example, the index is GTGGGGGG. If the barcodes are presented this was in your reads 1 (forward reads), you can run the program like this:
 
 ```bash
 ./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name
