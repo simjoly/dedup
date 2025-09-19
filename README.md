@@ -104,11 +104,11 @@ The index is before the space in the sequence name (line begining with @). In th
 
 ## Deduplication method
 
-Three options are possible for the demultiplication method
+Three options are possible for the deduplication method
 
 ### Virtual memory
 
-With this option, the reads and index are store in the virtual memory and this information is read to see if a new sequence is a duplicate (is already in memory). This approach is fast, exact (makes no errors), but uses ~50–100 bytes per read stored. Should be used with datasets up to ~ 50M reads. Usage is:
+With this option, the reads and indexes are stored in the virtual memory and this information is read to see if a new sequence is a duplicate (i.e., is already in memory). This approach is fast, exact (makes no errors), but uses ~50–100 bytes per read stored. Should be used with datasets up to ~ 50M reads. Usage is:
 
 ```bash
 ./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-memory
@@ -116,7 +116,7 @@ With this option, the reads and index are store in the virtual memory and this i
 
 ### Bloom filter (default option)
 
-The Bloom filter is an approach often used in bioinformatics. It is a probabilistic methods that trades exactness for probabilistic membership (false positive allowed, no false negatives). This allow to save a lot of memory space, and a few unique flags may be wrongly flagged as duplicates. Presently, the falso positive rate is fixed to 0.1%, but this can be adjusted in the script. Usage is:
+The Bloom filter is an approach often used in bioinformatics. It is a probabilistic method that trades exactness for probabilistic membership (false positive are allowed, no false negatives). This allow to save memory space, but a few unique flags may be wrongly flagged as duplicates. The false positive rate is fixed to 0.1% in the program, but this can be adjusted in the code. Usage is:
 
 ```bash
 ./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-bloom
@@ -124,7 +124,7 @@ The Bloom filter is an approach often used in bioinformatics. It is a probabilis
 
 ### SQlite database
 
-If memory is really a problem, then it is possible to store the reads in a database on drive. This requires very little memory, but that makes the program very slow.
+If memory is really a problem, then it is possible to store the reads in a database on disk. This requires very little virtual memory, but it makes the program run very slowly.
 
 ```bash
 ./dedup --read1 R1.fastq.gz --read2 R2.fastq.gz --barcode-in-name --use-sqlite
