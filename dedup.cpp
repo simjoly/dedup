@@ -11,6 +11,7 @@
 #include <fstream>
 #include <string>
 #include <unordered_set>
+#include <filesystem>
 #include <zlib.h>
 #include <openssl/sha.h>
 #include <sqlite3.h>
@@ -178,8 +179,12 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    std::string out1_name = "nodup_" + read1_file;
-    std::string out2_name = "nodup_" + read2_file;
+    // Extract base filenames (no directories)
+    std::string read1_base_filename = std::filesystem::path(read1_file).filename().string();
+    std::string read2_base_filename = std::filesystem::path(read2_file).filename().string();
+
+    std::string out1_name = "nodup_" + read1_base_filename;
+    std::string out2_name = "nodup_" + read2_base_filename;
     gzFile out1 = gzopen(out1_name.c_str(), "wb");
     gzFile out2 = gzopen(out2_name.c_str(), "wb");
 
